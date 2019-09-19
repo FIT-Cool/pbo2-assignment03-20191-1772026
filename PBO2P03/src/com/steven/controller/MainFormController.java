@@ -18,21 +18,24 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class MainFormController implements Initializable {
     public DatePicker date;
-    public TableColumn col04;
+
 
     public ObservableList<Category> getCategories() {
-        if (categories==null)categories= FXCollections.observableArrayList();
+        if (categories == null) categories = FXCollections.observableArrayList();
         return categories;
     }
 
     public ObservableList<Category> categories;
-    List<String> myCategory = new ArrayList<>();
     @FXML
     private ObservableList<Item> item;
     @FXML
@@ -45,6 +48,8 @@ public class MainFormController implements Initializable {
     private TableColumn<Item, String> col02;
     @FXML
     private TableColumn<Item, String> col03;
+    @FXML
+    private TableColumn<Item, String> col04;
     @FXML
     private TextField txtID;
     @FXML
@@ -61,22 +66,31 @@ public class MainFormController implements Initializable {
         try {
             if (txtNama.getText().trim().isEmpty() ||
                     txtID.getText().trim().isEmpty() ||
-
-                    choiceBox.getSelectionModel().isEmpty()) {
+                    choiceBox.getSelectionModel().isEmpty()
+                    || date.getValue() == null
+            ) {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText("Please fill id/name/category/date");
                 a.show();
             } else {
                 Item i = new Item();
                 Category c = new Category();
+
                 c.setName(choiceBox.getValue().toString());
                 i.setNama(txtNama.getText().trim());
                 i.setPrice(txtID.getText().trim());
                 i.setCategory(c);
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setContentText(date.getValue().toString());
+                a.show();
+                i.setTanggal(date.getValue().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
                 item.add(i);
             }
 
         } catch (Exception e) {
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setContentText("Field ID insert number please..");
+            a.show();
         }
 
 
@@ -87,7 +101,8 @@ public class MainFormController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         item = FXCollections.observableArrayList();
-        categories=FXCollections.observableArrayList(getCategories());
+        categories = FXCollections.observableArrayList(getCategories());
+        choiceBox.setItems(FXCollections.observableArrayList(categories));
         tableItem.setItems(item);
         choiceBox.setItems(categories);
         col01.setCellValueFactory((data) -> {
@@ -101,6 +116,10 @@ public class MainFormController implements Initializable {
         col03.setCellValueFactory((data) -> {
             Item f = data.getValue();
             return new SimpleStringProperty(f.getCategory().getName());
+        });
+        col04.setCellValueFactory((data) -> {
+            Item f = data.getValue();
+            return new SimpleStringProperty(f.getTanggal());
         });
     }
 
@@ -127,27 +146,38 @@ public class MainFormController implements Initializable {
 
     @FXML
     private void update(ActionEvent actionEvent) {
-        Item i = tableItem.getSelectionModel().getSelectedItem();
-        Category c = new Category();
-        c.setName(choiceBox.getValue().toString());
-        i.setNama(txtNama.getText());
-        i.setPrice(txtID.getText());
-        i.setCategory(c);
-        tableItem.getItems().set(index, i);
 
+        try {
+            Item i = tableItem.getSelectionModel().getSelectedItem();
+            Category c = new Category();
+            c.setName(choiceBox.getValue().toString());
+            i.setNama(txtNama.getText());
+            i.setPrice(txtID.getText());
+            i.setCategory(c);
+            tableItem.getItems().set(index, i);
+        } catch (Exception e) {
+
+        }
     }
 
 
     @FXML
     private void pilihTabel(MouseEvent mouseEvent) {
         try {
-            update.setDisable(false);
+            ZoneId defaultZoneId = ZoneId.systemDefault();
             Item i = tableItem.getSelectionModel().getSelectedItem();
             index = tableItem.getSelectionModel().getSelectedIndex();
-            choiceBox.setValue(i.getCategory().getName());
+            SimpleDateFormat formatter1=new SimpleDateFormat("dd MMM yyyy");
+            Date isidate=formatter1.parse(i.getTanggal());
+            Instant instant=isidate.toInstant();
+            LocalDate isidataAkhir=instant.atZone(defaultZoneId).toLocalDate();
+            update.setDisable(false);
+            choiceBox.setValue(i.getCategory());
             txtNama.setText(i.getNama());
             txtID.setText(i.getPrice());
+            date.setValue(isidataAkhir);
         } catch (Exception e) {
+//            update.setDisable(true);
         }
 
 

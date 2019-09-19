@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,27 +32,32 @@ public class CategoryManagementController implements Initializable {
 
     public void save(ActionEvent actionEvent) {
         Category c = new Category();
-        c.setName(txtNama.getText().trim());
-        c.setId(Integer.valueOf(txtID.getText().trim()));
-        mainFormController.getCategories().add(c);
-//        if (txtCategoryName.getText().trim().isEmpty()) {
-//            Alert a = new Alert(Alert.AlertType.ERROR);
-//            a.setContentText("Please fill category name");
-//            a.show();
-//        } else {
-//            boolean cek = false;
-//            for (String str : myCategory) {
-//                if (str.trim().contains(txtCategoryName.getText().trim())) cek = true;
-//            }
-//            if (!cek) {
-//                myCategory.add(txtCategoryName.getText().trim());
-//                choiceBox.setItems(FXCollections.observableArrayList(myCategory));
-//            } else {
-//                Alert a = new Alert(Alert.AlertType.ERROR);
-//                a.setContentText("Duplicate Category Name!");
-//                a.show();
-//            }
-//        }
+        try {
+            if (txtNama.getText().trim().isEmpty() && txtID.getText().trim().isEmpty()) {
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setContentText("Please fill category name");
+                a.show();
+            } else {
+                boolean cek = false;
+                for (Category ctr : mainFormController.getCategories()) {
+                    if (ctr.getName().trim().contains(txtNama.getText().trim())) cek = true;
+                }
+                if (!cek) {
+                    c.setName(txtNama.getText().trim());
+                    c.setId(Integer.valueOf(txtID.getText().trim()));
+                    mainFormController.getCategories().add(c);
+                } else {
+                    Alert a = new Alert(Alert.AlertType.ERROR);
+                    a.setContentText("Duplicate Category Name!");
+                    a.show();
+                }
+            }
+        }catch (Exception e){
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setContentText("Field ID insert number please..");
+            a.show();
+        }
+
     }
 
     public void pilihTabel(MouseEvent mouseEvent) {

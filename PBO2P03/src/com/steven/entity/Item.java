@@ -3,6 +3,16 @@ package com.steven.entity;
 public class Item extends Category {
     private String nama;
     private String price;
+
+    public String getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(String tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    private String tanggal;
     private Category category;
 
 
