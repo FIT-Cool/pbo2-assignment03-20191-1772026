@@ -35,7 +35,7 @@ public class MainFormController implements Initializable {
         return categories;
     }
 
-    public ObservableList<Category> categories;
+    private ObservableList<Category> categories;
     @FXML
     private ObservableList<Item> item;
     @FXML
@@ -55,8 +55,6 @@ public class MainFormController implements Initializable {
     @FXML
     private Button update;
     @FXML
-    private TextField txtCategoryName;
-    @FXML
     private ChoiceBox choiceBox;
     private int index;
 
@@ -74,16 +72,10 @@ public class MainFormController implements Initializable {
                 a.show();
             } else {
                 Item i = new Item();
-                Category c = new Category();
-
-                c.setName(choiceBox.getValue().toString());
                 i.setNama(txtNama.getText().trim());
                 i.setPrice(txtID.getText().trim());
-                i.setCategory(c);
+                i.setCategory((Category) choiceBox.getValue());
 
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText(date.getValue().toString());
-                a.show();
                 i.setTanggal(date.getValue().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
                 item.add(i);
             }
@@ -137,7 +129,8 @@ public class MainFormController implements Initializable {
 
     @FXML
     private void reset(ActionEvent actionEvent) {
-        txtCategoryName.setText("");
+        date.setValue(null);
+        choiceBox.setValue(null);
         txtNama.setText("");
         txtID.setText("");
         update.setDisable(true);
@@ -148,11 +141,11 @@ public class MainFormController implements Initializable {
 
         try {
             Item i = tableItem.getSelectionModel().getSelectedItem();
-            Category c = new Category();
-            c.setName(choiceBox.getValue().toString());
+//            c.setName(choiceBox.getValue().toString());
             i.setNama(txtNama.getText());
             i.setPrice(txtID.getText());
-            i.setCategory(c);
+            i.setCategory((Category) choiceBox.getValue());
+            i.setTanggal(date.getValue().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
             tableItem.getItems().set(index, i);
         } catch (Exception e) {
 
@@ -172,7 +165,7 @@ public class MainFormController implements Initializable {
             Date isidate=formatter1.parse(i.getTanggal());
             Instant instant=isidate.toInstant();
             LocalDate isidataAkhir=instant.atZone(defaultZoneId).toLocalDate();
-            choiceBox.setValue(i.getCategory().getName());
+            choiceBox.setValue(i.getCategory());
             txtNama.setText(i.getNama());
             txtID.setText(i.getPrice());
             date.setValue(isidataAkhir);
