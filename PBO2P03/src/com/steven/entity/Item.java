@@ -3,6 +3,9 @@ package com.steven.entity;
 public class Item extends Category {
     private String nama;
     private String price;
+    private String tanggal;
+    private Category category;
+
 
     public String getTanggal() {
         return tanggal;
@@ -11,10 +14,6 @@ public class Item extends Category {
     public void setTanggal(String tanggal) {
         this.tanggal = tanggal;
     }
-
-    private String tanggal;
-    private Category category;
-
 
     public Category getCategory() {
         return category;

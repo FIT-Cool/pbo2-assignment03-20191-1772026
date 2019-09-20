@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 public class Category implements Serializable {
     private final IntegerProperty id=new SimpleIntegerProperty();
+    private final StringProperty name=new SimpleStringProperty();
+
 
     public String getId() {
         return Integer.toString(id.get());
@@ -33,8 +35,6 @@ public class Category implements Serializable {
     public void setName(String name) {
         this.name.set(name);
     }
-
-    private final StringProperty name=new SimpleStringProperty();
 
     @Override
     public String toString() {

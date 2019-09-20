@@ -80,6 +80,7 @@ public class MainFormController implements Initializable {
                 i.setNama(txtNama.getText().trim());
                 i.setPrice(txtID.getText().trim());
                 i.setCategory(c);
+
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setContentText(date.getValue().toString());
                 a.show();
@@ -101,10 +102,8 @@ public class MainFormController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         item = FXCollections.observableArrayList();
-        categories = FXCollections.observableArrayList(getCategories());
-        choiceBox.setItems(FXCollections.observableArrayList(categories));
         tableItem.setItems(item);
-        choiceBox.setItems(categories);
+        choiceBox.setItems(getCategories());
         col01.setCellValueFactory((data) -> {
             Item f = data.getValue();
             return new SimpleStringProperty(f.getNama());
@@ -164,15 +163,16 @@ public class MainFormController implements Initializable {
     @FXML
     private void pilihTabel(MouseEvent mouseEvent) {
         try {
+            update.setDisable(false);
             ZoneId defaultZoneId = ZoneId.systemDefault();
+            SimpleDateFormat formatter1=new SimpleDateFormat("dd MMM yyyy");
+
             Item i = tableItem.getSelectionModel().getSelectedItem();
             index = tableItem.getSelectionModel().getSelectedIndex();
-            SimpleDateFormat formatter1=new SimpleDateFormat("dd MMM yyyy");
             Date isidate=formatter1.parse(i.getTanggal());
             Instant instant=isidate.toInstant();
             LocalDate isidataAkhir=instant.atZone(defaultZoneId).toLocalDate();
-            update.setDisable(false);
-            choiceBox.setValue(i.getCategory());
+            choiceBox.setValue(i.getCategory().getName());
             txtNama.setText(i.getNama());
             txtID.setText(i.getPrice());
             date.setValue(isidataAkhir);
