@@ -14,6 +14,11 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Steven Rumanto
+ * 1772026
+ */
+
 public class CategoryManagementController implements Initializable {
 
     public TextField txtID;

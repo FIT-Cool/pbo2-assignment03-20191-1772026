@@ -1,5 +1,10 @@
 package com.steven.entity;
 
+/**
+ * Steven Rumanto
+ * 1772026
+ */
+
 public class Item extends Category {
     private String nama;
     private String price;

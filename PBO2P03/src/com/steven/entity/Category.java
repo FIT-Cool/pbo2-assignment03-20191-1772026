@@ -7,6 +7,11 @@ import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 
+/**
+ * Steven Rumanto
+ * 1772026
+ */
+
 public class Category implements Serializable {
     private final IntegerProperty id=new SimpleIntegerProperty();
     private final StringProperty name=new SimpleStringProperty();

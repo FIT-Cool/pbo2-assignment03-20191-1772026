@@ -26,6 +26,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Steven Rumanto
+ * 1772026
+ */
+
 public class MainFormController implements Initializable {
     public DatePicker date;
 
